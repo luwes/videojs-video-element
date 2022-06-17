@@ -8,7 +8,7 @@ One of the goals was to have `<videojs-video>` seamlessly integrate with [Media 
 
 > 🙋 Looking for a YouTube video element? Check out [`<youtube-video>`](https://github.com/muxinc/youtube-video-element).
 
-## Example ([CodeSandbox](https://codesandbox.io/s/videojs-video-element-ozylhs))
+## Example ([CodeSandbox](https://codesandbox.io/s/videojs-video-element-usb0dn))
 
 <!-- prettier-ignore -->
 ```html
