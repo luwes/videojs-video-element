@@ -154,11 +154,16 @@ class VideojsVideoElement extends SuperVideoElement {
     this.api?.[prop]?.(val);
   }
 
-  // If the getter from SuperVideoElement is overriden, it's required to define
-  // the setter again too unless it's a readonly property! It's a JS thing.
+  // If the getter from SuperVideoElement is overridden, it's required to define
+  // the setter again too unless it's a read only property! It's a JS thing.
 
   get version() {
     return this.getAttribute('version') ?? '7.19.2';
+  }
+
+  // duration is acting weird in videojs, get it straight from the video.
+  get duration() {
+    return this.nativeEl?.duration ?? NaN;
   }
 
   get src() {
