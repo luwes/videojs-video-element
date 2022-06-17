@@ -73,6 +73,7 @@ class VideojsVideoElement extends SuperVideoElement {
     }
 
     this.api.ready(() => {
+      this.dispatchEvent(new Event('volumechange'));
       this.dispatchEvent(new Event('loadcomplete'));
       this.loadComplete.resolve();
     });
@@ -149,7 +150,8 @@ class VideojsVideoElement extends SuperVideoElement {
   }
 
   get(prop) {
-    return this.api?.[prop]?.();
+    // Some props are acting weird in videojs, get it straight from the video.
+    return this.nativeEl?.[prop];
   }
 
   set(prop, val) {
@@ -161,11 +163,6 @@ class VideojsVideoElement extends SuperVideoElement {
 
   get version() {
     return this.getAttribute('version') ?? '7.19.2';
-  }
-
-  // duration is acting weird in videojs, get it straight from the video.
-  get duration() {
-    return this.nativeEl?.duration ?? NaN;
   }
 
   get src() {
