@@ -52,10 +52,6 @@ class VideojsVideoElement extends SuperVideoElement {
       const video = createElement('video', {
         class: `video-js ${this.className}`,
       });
-      video.append(
-        createElement('source', { src: this.src }),
-        ...this.querySelectorAll('source'),
-      );
       this.shadowRoot.append(video);
 
       // You can load the videojs script ahead of time if you like,
@@ -65,6 +61,12 @@ class VideojsVideoElement extends SuperVideoElement {
         const scriptUrl = `https://unpkg.com/video.js@${this.version}/dist/video.min.js`;
         videojs = await loadScript(scriptUrl, 'videojs');
       }
+
+      if (this.src) {
+        video.append(createElement('source', { src: this.src }));
+      }
+      video.append(...this.querySelectorAll('source'));
+
       this.api = videojs(video, options);
     } else {
       this.api.src(this.src);
@@ -100,7 +102,7 @@ class VideojsVideoElement extends SuperVideoElement {
         .forEach(({ cssText }) => {
           document.head.append(createElement('style', {}, cssText));
         });
-    }
+    };
   }
 
   async attributeChangedCallback(attrName, oldValue, newValue) {
