@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/luwes/videojs-video-element/compare/v0.1.2...v0.1.3) (2022-06-18)
+
+
+### Bug Fixes
+
+* bump super-media-element from 0.1.1 to 0.2.0 ([#3](https://github.com/luwes/videojs-video-element/issues/3)) ([2de7f1d](https://github.com/luwes/videojs-video-element/commit/2de7f1dc1b857de7ab0fb11406b2c054e5cc600c))
+
+
+
 ## [0.1.2](https://github.com/luwes/videojs-video-element/compare/v0.1.1...v0.1.2) (2022-06-17)
 
 
