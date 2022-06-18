@@ -48,6 +48,11 @@ class VideojsVideoElement extends SuperVideoElement {
       muted: this.defaultMuted,
     };
 
+    if (!this.controls) {
+      // If controls are disabled remove all children but the media loader.
+      options.children = ['mediaLoader'];
+    }
+
     if (!this.nativeEl) {
       const video = createElement('video', {
         class: `video-js ${this.className}`,
@@ -62,12 +67,10 @@ class VideojsVideoElement extends SuperVideoElement {
         videojs = await loadScript(scriptUrl, 'videojs');
       }
 
-      if (this.src) {
-        video.append(createElement('source', { src: this.src }));
-      }
       video.append(...this.querySelectorAll('source'));
 
       this.api = videojs(video, options);
+      if (this.src) this.api.src(this.src);
     } else {
       this.api.src(this.src);
     }
@@ -88,22 +91,25 @@ class VideojsVideoElement extends SuperVideoElement {
       this.load();
     }
 
-    const link = createElement('link', {
-      href: `https://unpkg.com/video.js@${this.version}/dist/video-js.min.css`,
-      rel: 'stylesheet',
-      crossorigin: '',
-    });
-    this.shadowRoot.prepend(link);
+    if (this.controls) {
+      // Don't bother loading any stylesheets with controls disabled.
+      const link = createElement('link', {
+        href: `https://unpkg.com/video.js@${this.version}/dist/video-js.min.css`,
+        rel: 'stylesheet',
+        crossorigin: '',
+      });
+      this.shadowRoot.prepend(link);
 
-    // There is a bug? in Chrome and Firefox where @font-face doesn't work in shadow dom.
-    // Appending it in the document fixes the missing font icon issue.
-    link.onload = () => {
-      [...this.shadowRoot.styleSheets[0].cssRules]
-        .filter(({ cssText }) => cssText.startsWith('@font-face'))
-        .forEach(({ cssText }) => {
-          document.head.append(createElement('style', {}, cssText));
-        });
-    };
+      // There is a bug? in Chrome and Firefox where @font-face doesn't work in shadow dom.
+      // Appending it in the document fixes the missing font icon issue.
+      link.onload = () => {
+        [...this.shadowRoot.styleSheets[0].cssRules]
+          .filter(({ cssText }) => cssText.startsWith('@font-face'))
+          .forEach(({ cssText }) => {
+            document.head.append(createElement('style', {}, cssText));
+          });
+      };
+    }
   }
 
   async attributeChangedCallback(attrName, oldValue, newValue) {
