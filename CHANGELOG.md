@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/luwes/videojs-video-element/compare/v0.1.3...v0.1.4) (2022-06-18)
+
+
+### Bug Fixes
+
+* optimize CSS requests if controls disabled ([cccf00e](https://github.com/luwes/videojs-video-element/commit/cccf00e8d95554b67cca012b0cb30b334f311b8e))
+
+
+
 ## [0.1.3](https://github.com/luwes/videojs-video-element/compare/v0.1.2...v0.1.3) (2022-06-18)
 
 
