@@ -1,3 +1,13 @@
+## [0.1.5](https://github.com/luwes/videojs-video-element/compare/v0.1.4...v0.1.5) (2022-07-03)
+
+
+### Bug Fixes
+
+* loadScript race condition ([eb5fa42](https://github.com/luwes/videojs-video-element/commit/eb5fa425b9a5d949227cff86d6a221565bed0c08))
+* upgrade super-media-element ([6cd4448](https://github.com/luwes/videojs-video-element/commit/6cd4448bc219b994ca39bab0a2d95befe057ef51))
+
+
+
 ## [0.1.4](https://github.com/luwes/videojs-video-element/compare/v0.1.3...v0.1.4) (2022-06-18)
 
 
