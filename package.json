@@ -22,7 +22,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "super-media-element": "^0.2.0"
+    "super-media-element": "^0.3.0"
   },
   "devDependencies": {
     "@open-wc/testing": "^3.0.3",
