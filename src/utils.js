@@ -1,15 +1,22 @@
-export async function loadScript(src, globalName) {
+const loadScriptCache = {};
+export async function loadScript(src, globalName, readyFnName) {
+  if (loadScriptCache[src]) return loadScriptCache[src];
   if (globalName && self[globalName]) {
+    await delay(0);
     return self[globalName];
   }
-  return new Promise(function (resolve, reject) {
+  return (loadScriptCache[src] = new Promise(function (resolve, reject) {
     const script = document.createElement('script');
     script.src = src;
-    script.onload = () => resolve(self[globalName]);
+    const ready = () => resolve(self[globalName]);
+    if (readyFnName) (self[readyFnName] = ready);
+    script.onload = () => !readyFnName && ready();
     script.onerror = reject;
-    document.head.appendChild(script);
-  });
+    document.head.append(script);
+  }));
 }
+
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function promisify(fn) {
   return (...args) =>
