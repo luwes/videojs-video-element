@@ -1,6 +1,5 @@
 // https://docs.videojs.com/
 import { SuperVideoElement } from 'super-media-element';
-import { loadScript, PublicPromise, createElement } from './utils.js';
 
 const templateShadowDOM = document.createElement('template');
 templateShadowDOM.innerHTML = `
@@ -63,7 +62,7 @@ class VideojsVideoElement extends SuperVideoElement {
       // if it's not there we'll laaaaaaaaaaaazy load it.
       let videojs = globalThis.videojs;
       if (!videojs) {
-        const scriptUrl = `https://unpkg.com/video.js@${this.version}/dist/video.min.js`;
+        const scriptUrl = `https://cdn.jsdelivr.net/npm/video.js@${this.version}/dist/video.min.js`;
         videojs = await loadScript(scriptUrl, 'videojs');
       }
 
@@ -94,7 +93,7 @@ class VideojsVideoElement extends SuperVideoElement {
     if (this.controls) {
       // Don't bother loading any stylesheets with controls disabled.
       const link = createElement('link', {
-        href: `https://unpkg.com/video.js@${this.version}/dist/video-js.min.css`,
+        href: `https://cdn.jsdelivr.net/npm/video.js@${this.version}/dist/video-js.min.css`,
         rel: 'stylesheet',
         crossorigin: '',
       });
@@ -214,13 +213,53 @@ class VideojsVideoElement extends SuperVideoElement {
   }
 }
 
-if (
-  globalThis.customElements.get('videojs-video') ||
-  globalThis.VideojsVideoElement
-) {
-  console.debug('VideojsVideoElement: <videojs-video> defined more than once.');
-} else {
-  globalThis.VideojsVideoElement = VideojsVideoElement;
+const loadScriptCache = {};
+async function loadScript(src, globalName, readyFnName) {
+  if (loadScriptCache[src]) return loadScriptCache[src];
+  if (globalName && self[globalName]) {
+    await delay(0);
+    return self[globalName];
+  }
+  return (loadScriptCache[src] = new Promise(function (resolve, reject) {
+    const script = document.createElement('script');
+    script.src = src;
+    const ready = () => resolve(self[globalName]);
+    if (readyFnName) (self[readyFnName] = ready);
+    script.onload = () => !readyFnName && ready();
+    script.onerror = reject;
+    document.head.append(script);
+  }));
+}
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * A utility to create Promises with convenient public resolve and reject methods.
+ * @return {Promise}
+ */
+class PublicPromise extends Promise {
+  constructor(executor = () => {}) {
+    let res, rej;
+    super((resolve, reject) => {
+      executor(resolve, reject);
+      res = resolve;
+      rej = reject;
+    });
+    this.resolve = res;
+    this.reject = rej;
+  }
+}
+
+function createElement(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  Object.keys(attrs).forEach(
+    (name) => attrs[name] != null && el.setAttribute(name, attrs[name])
+  );
+  el.append(...children);
+  return el;
+}
+
+if (!globalThis.customElements.get('videojs-video')) {
   globalThis.customElements.define('videojs-video', VideojsVideoElement);
 }
 
