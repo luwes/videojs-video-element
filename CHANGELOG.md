@@ -1,3 +1,12 @@
+# [0.2.0](https://github.com/luwes/videojs-video-element/compare/v0.1.5...v0.2.0) (2023-01-21)
+
+
+### Features
+
+* make build-less ESM module ([50f6765](https://github.com/luwes/videojs-video-element/commit/50f6765aab96738e9591c8a97b9e6d933a965b00))
+
+
+
 ## [0.1.5](https://github.com/luwes/videojs-video-element/compare/v0.1.4...v0.1.5) (2022-07-03)
 
 
