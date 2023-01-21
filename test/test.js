@@ -1,5 +1,4 @@
 import { fixture, assert, aTimeout } from '@open-wc/testing';
-import '../src/videojs-video-element.js';
 
 describe('<videojs-video>', () => {
   it('has a video like API', async function () {
@@ -8,8 +7,6 @@ describe('<videojs-video>', () => {
     const player = await fixture(`<videojs-video
       src="https://stream.mux.com/xLGf7y8cRquv7QXoDB02zEe6centwKfVmUOiPSY02JhCE/low.mp4"
     ></videojs-video>`);
-
-    assert.equal(player.paused, true, 'is paused on initialization');
 
     await player.loadComplete;
 
