@@ -1,4 +1,4 @@
-# `<videojs-video>`
+# `<videojs-video>` [![Version](https://img.shields.io/npm/v/videojs-video-element)](https://www.npmjs.com/package/videojs-video-element) [![Badge size](https://img.badgesize.io/https://cdn.jsdelivr.net/npm/videojs-video-element/+esm?compression=gzip&label=gzip)](https://cdn.jsdelivr.net/npm/videojs-video-element/+esm)
 
 A custom element (web component) for Video.js.
 
