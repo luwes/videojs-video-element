@@ -167,7 +167,7 @@ class VideojsVideoElement extends SuperVideoElement {
   // the setter again too unless it's a read only property! It's a JS thing.
 
   get version() {
-    return this.getAttribute('version') ?? '7.19.2';
+    return this.getAttribute('version') ?? '8.2.1';
   }
 
   get src() {
