@@ -1,3 +1,21 @@
+# [0.3.0](https://github.com/luwes/videojs-video-element/compare/v0.1.2...v0.3.0) (2023-04-01)
+
+
+### Bug Fixes
+
+* bump super-media-element from 0.1.1 to 0.2.0 ([#3](https://github.com/luwes/videojs-video-element/issues/3)) ([44482db](https://github.com/luwes/videojs-video-element/commit/44482db8e50a8159c58848dedb9341cb7590c181))
+* loadScript race condition ([056e6ec](https://github.com/luwes/videojs-video-element/commit/056e6eca3ef9cc957ae5b3302dc94a28f4b84727))
+* optimize CSS requests if controls disabled ([c8a0c79](https://github.com/luwes/videojs-video-element/commit/c8a0c7994064720d5cc7bf8d5aab72533e5bfde3))
+* upgrade default videojs version ([13b8c51](https://github.com/luwes/videojs-video-element/commit/13b8c512d1bdee66c8f96f5eb1a77f4f13b6411e))
+* upgrade super-media-element ([7e6629e](https://github.com/luwes/videojs-video-element/commit/7e6629ed44cb59783cb8bab1fb4e03b36e7266eb))
+
+
+### Features
+
+* make build-less ESM module ([f1d3009](https://github.com/luwes/videojs-video-element/commit/f1d300983e69657a756b5ff45637ccd598c6ae8f))
+
+
+
 # [0.2.0](https://github.com/luwes/videojs-video-element/compare/v0.1.5...v0.2.0) (2023-01-21)
 
 
