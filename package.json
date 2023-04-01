@@ -1,6 +1,6 @@
 {
   "name": "videojs-video-element",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Custom element (web component) for Video.js.",
   "type": "module",
   "main": "videojs-video-element.js",
