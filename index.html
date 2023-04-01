@@ -1,77 +1,76 @@
 <!doctype html>
-<head>
-  <title>&lt;videojs-video&gt;</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
-  />
-  <style>
-    body {
-      min-height: 80%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+
+<title>&lt;videojs-video&gt;</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+>
+<style>
+  body {
+    min-height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  videojs-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+</style>
+
+<!-- not required but can be good to preload to avoid FOUC -->
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/video.js@8.2.1/dist/video-js.min.css"
+  as="style"
+  crossorigin
+>
+<link
+  rel="preload"
+  href="https://cdn.jsdelivr.net/npm/@videojs/themes@1.0.1/dist/fantasy/index.css"
+  as="style"
+  crossorigin
+>
+
+<script type="importmap">
+  {
+    "imports": {
+      "super-media-element": "https://cdn.jsdelivr.net/npm/super-media-element"
     }
-    videojs-video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-    }
-  </style>
+  }
+</script>
+<script type="module" src="./videojs-video-element.js"></script>
 
-  <!-- not required but can be good to preload to avoid FOUC -->
-  <link
-    rel="preload"
-    href="https://cdn.jsdelivr.net/npm/video.js@8.2.1/dist/video-js.min.css"
-    as="style"
-    crossorigin
+
+<h1>&lt;videojs-video&gt;</h1>
+<br />
+
+<videojs-video
+  class="vjs-theme-fantasy"
+  stylesheet="https://cdn.jsdelivr.net/npm/@videojs/themes@1.0.1/dist/fantasy/index.css"
+  poster="https://image.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/thumbnail.jpg?time=56"
+  controls
+  loop
+  muted
+>
+  <source
+    src="https://stream.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/high.mp4"
   />
-  <link
-    rel="preload"
-    href="https://cdn.jsdelivr.net/npm/@videojs/themes@1.0.1/dist/fantasy/index.css"
-    as="style"
-    crossorigin
+  <track
+    default
+    label="English"
+    kind="captions"
+    srclang="en"
+    src="./en-cc.vtt"
   />
+</videojs-video>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "super-media-element": "https://cdn.jsdelivr.net/npm/super-media-element"
-      }
-    }
-  </script>
-  <script type="module" src="./videojs-video-element.js"></script>
-</head>
-<body>
-  <h1>&lt;videojs-video&gt;</h1>
-  <br />
-
-  <videojs-video
-    class="vjs-theme-fantasy"
-    stylesheet="https://cdn.jsdelivr.net/npm/@videojs/themes@1.0.1/dist/fantasy/index.css"
-    poster="https://image.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/thumbnail.jpg?time=56"
-    controls
-    loop
-    muted
-  >
-    <source
-      src="https://stream.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/high.mp4"
-    />
-    <track
-      default
-      label="English"
-      kind="captions"
-      srclang="en"
-      src="./en-cc.vtt"
-    />
-  </videojs-video>
-
-  <script>
-    const video = document.querySelector('videojs-video');
-    video.addEventListener('durationchange', () => {
-      console.log(video.duration);
-    });
-  </script>
-</body>
+<script>
+  const video = document.querySelector('videojs-video');
+  video.addEventListener('durationchange', () => {
+    console.log(video.duration);
+  });
+</script>
