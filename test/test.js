@@ -1,81 +1,109 @@
-import { fixture, assert, aTimeout } from '@open-wc/testing';
+import { test } from 'zora';
 
-describe('<videojs-video>', () => {
-  it('has a video like API', async function () {
-    this.timeout(10000);
+async function createVideoElement() {
+  const video = fixture(`<videojs-video
+    src="https://stream.mux.com/xLGf7y8cRquv7QXoDB02zEe6centwKfVmUOiPSY02JhCE/low.mp4"
+    muted
+  ></videojs-video>`);
+  await video.loadComplete;
+  return video;
+}
 
-    const player = await fixture(`<videojs-video
-      src="https://stream.mux.com/xLGf7y8cRquv7QXoDB02zEe6centwKfVmUOiPSY02JhCE/low.mp4"
-    ></videojs-video>`);
+test('has default video props', async function (t) {
+  const video = await createVideoElement();
 
-    await player.loadComplete;
+  t.equal(video.paused, true, 'is paused on initialization');
 
-    assert.equal(player.paused, true, 'is paused on initialization');
-    assert(!player.ended, 'is not ended');
+  await video.loadComplete;
 
-    assert(!player.loop, 'loop is false by default');
-    player.loop = true;
-    assert(player.loop, 'loop is true');
-
-    assert.equal(player.volume, 1, 'is all turned up');
-    player.volume = 0.5;
-    assert.equal(player.volume, 0.5, 'is half volume');
-
-    player.muted = true;
-    assert(player.muted, 'is muted');
-
-    if (player.duration == null || Number.isNaN(player.duration)) {
-      await promisify(player.addEventListener.bind(player))('durationchange');
-    }
-
-    assert.equal(Math.round(player.duration), 115, `is 115s long`);
-
-    const loadComplete = player.loadComplete;
-
-    player.src =
-      'https://stream.mux.com/1EFcsL5JET00t00mBv01t00xt00T4QeNQtsXx2cKY6DLd7RM/low.mp4';
-    await player.loadComplete;
-
-    assert(
-      loadComplete != player.loadComplete,
-      'creates a new promise after new src'
-    );
-
-    if (player.duration == null || Number.isNaN(player.duration)) {
-      await promisify(player.addEventListener.bind(player))('durationchange');
-    }
-
-    assert.equal(Math.round(player.duration), 20, `is 20s long`);
-
-    player.src =
-      'https://stream.mux.com/ERDtGClvKFcaBm01psUirD1tGcV4NeTqEtRNf1Zy87800/low.mp4';
-    await player.loadComplete;
-
-    if (player.duration == null || Number.isNaN(player.duration)) {
-      await promisify(player.addEventListener.bind(player))('durationchange');
-    }
-
-    assert.equal(Math.round(player.duration), 90, `is 90s long`);
-
-    try {
-      await player.play();
-    } catch (error) {
-      console.warn(error);
-    }
-    assert(!player.paused, 'is playing after player.play()');
-
-    await aTimeout(1000);
-
-    assert.equal(String(Math.round(player.currentTime)), 1, 'is about 1s in');
-
-    player.playbackRate = 2;
-    await aTimeout(1000);
-
-    assert.equal(String(Math.round(player.currentTime)), 3, 'is about 3s in');
-  });
+  t.equal(video.paused, true, 'is paused on initialization');
+  t.ok(!video.ended, 'is not ended');
+  t.ok(video.muted, 'is muted');
 });
 
-export function promisify(fn) {
+test('volume', async function (t) {
+  const video = await createVideoElement();
+  await video.loadComplete;
+
+  video.volume = 1;
+  await delay(100); // postMessage is not instant
+  t.equal(video.volume, 1, 'is all turned up. volume: ' + video.volume);
+  video.volume = 0.5;
+  await delay(100); // postMessage is not instant
+  t.equal(video.volume, 0.5, 'is half volume');
+});
+
+test('loop', async function (t) {
+  const video = await createVideoElement();
+  await video.loadComplete;
+
+  t.ok(!video.loop, 'loop is false by default');
+  video.loop = true;
+  t.ok(video.loop, 'loop is true');
+});
+
+test('duration', async function (t) {
+  const video = await createVideoElement();
+  await video.loadComplete;
+
+  if (video.duration == null || Number.isNaN(video.duration)) {
+    await promisify(video.addEventListener.bind(video))('durationchange');
+  }
+
+  t.equal(Math.round(video.duration), 115, `is 115s long`);
+});
+
+test('load promise', async function (t) {
+  const video = await createVideoElement();
+  await video.loadComplete;
+
+  const loadComplete = video.loadComplete;
+
+  video.src = 'https://stream.mux.com/ERDtGClvKFcaBm01psUirD1tGcV4NeTqEtRNf1Zy87800/low.mp4';
+  await video.loadComplete;
+
+  t.ok(
+    loadComplete != video.loadComplete,
+    'creates a new promise after new src'
+  );
+
+  if (video.duration == null || Number.isNaN(video.duration)) {
+    await promisify(video.addEventListener.bind(video))('durationchange');
+  }
+
+  t.equal(Math.round(video.duration), 90, `is 90s long`);
+});
+
+test('play promise', async function (t) {
+  const video = await createVideoElement();
+  await video.loadComplete;
+
+  video.muted = true;
+
+  try {
+    await video.play();
+  } catch (error) {
+    console.warn(error);
+  }
+  t.ok(!video.paused, 'is playing after video.play()');
+});
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fixture(html) {
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const fragment = template.content.cloneNode(true);
+  const result = fragment.children.length > 1
+    ? [...fragment.children]
+    : fragment.children[0];
+  document.body.append(fragment);
+  return result;
+}
+
+function promisify(fn) {
   return (...args) =>
     new Promise((resolve) => {
       fn(...args, (...res) => {

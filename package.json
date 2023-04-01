@@ -4,6 +4,7 @@
   "description": "Custom element (web component) for Video.js.",
   "type": "module",
   "main": "videojs-video-element.js",
+  "files": [],
   "repository": "luwes/videojs-video-element",
   "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
   "license": "MIT",
@@ -12,24 +13,18 @@
     "url": "https://github.com/luwes/videojs-video-element/issues"
   },
   "scripts": {
-    "test": "web-test-runner --config test/web-test-runner.config.js",
-    "dev": "npx serve ."
+    "lint": "npx eslint *.js",
+    "test": "wet run",
+    "dev": "wet serve"
   },
   "dependencies": {
     "super-media-element": "^0.4.0"
   },
   "devDependencies": {
-    "@open-wc/testing": "^3.0.3",
-    "@web/test-runner": "^0.14.0",
-    "eslint": "^8.10.0",
-    "prettier": "^2.5.1"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "singleQuote": true,
-    "semi": true
+    "wet-run": "^0.0.7"
   },
   "eslintConfig": {
+    "root": true,
     "globals": {
       "globalThis": "writable"
     },
