@@ -1,12 +1,10 @@
 import { test } from 'zora';
 
 async function createVideoElement() {
-  const video = fixture(`<videojs-video
+  return fixture(`<videojs-video
     src="https://stream.mux.com/xLGf7y8cRquv7QXoDB02zEe6centwKfVmUOiPSY02JhCE/low.mp4"
     muted
   ></videojs-video>`);
-  await video.loadComplete;
-  return video;
 }
 
 test('has default video props', async function (t) {
