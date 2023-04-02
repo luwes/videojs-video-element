@@ -2,11 +2,17 @@
 import { SuperVideoElement } from 'super-media-element';
 
 const templateShadowDOM = document.createElement('template');
-templateShadowDOM.innerHTML = `
+templateShadowDOM.innerHTML = /*html*/`
 <style>
   :host {
+    display: inline-block;
+    min-width: 300px;
+    min-height: 150px;
     position: relative;
-    width: 100%;
+  }
+  video {
+    max-width: 100%;
+    max-height: 100%;
   }
   div.video-js {
     position: absolute;
@@ -16,20 +22,30 @@ templateShadowDOM.innerHTML = `
     right: 0;
   }
 </style>
+<slot name="video">
+  <video></video>
+</slot>
+<slot></slot>
 `;
 
 class VideojsVideoElement extends SuperVideoElement {
+  static template = templateShadowDOM;
+
   static observedAttributes = [
     ...SuperVideoElement.observedAttributes,
     'stylesheet',
   ];
 
+  #apiInit;
+
   constructor() {
     super();
-
-    this.shadowRoot.append(templateShadowDOM.content.cloneNode(true));
-
     this.loadComplete = new PublicPromise();
+  }
+
+  get nativeEl() {
+    return this.querySelector(':scope > [slot=video]')
+      ?? this.shadowRoot.querySelector('video');
   }
 
   async load() {
@@ -52,11 +68,11 @@ class VideojsVideoElement extends SuperVideoElement {
       options.children = ['mediaLoader'];
     }
 
-    if (!this.nativeEl) {
-      const video = createElement('video', {
-        class: `video-js ${this.className}`,
-      });
-      this.shadowRoot.append(video);
+    if (!this.#apiInit) {
+      this.#apiInit = true;
+
+      const video = this.nativeEl;
+      video.classList.add('video-js', ...this.classList);
 
       // You can load the videojs script ahead of time if you like,
       // if it's not there we'll laaaaaaaaaaaazy load it.
@@ -121,7 +137,7 @@ class VideojsVideoElement extends SuperVideoElement {
       case 'stylesheet':
         this.shadowRoot.querySelector('#stylesheet')?.remove();
         if (newValue) {
-          this.shadowRoot.append(
+          this.shadowRoot.prepend(
             createElement('link', {
               id: 'stylesheet',
               href: newValue,

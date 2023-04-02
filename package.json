@@ -18,7 +18,7 @@
     "dev": "wet serve"
   },
   "dependencies": {
-    "super-media-element": "^0.4.0"
+    "super-media-element": "^0.4.2"
   },
   "devDependencies": {
     "wet-run": "^0.0.7"
