@@ -1,3 +1,7 @@
+# [1.0.0](https://github.com/luwes/videojs-video-element/compare/v0.3.1...v1.0.0) (2023-04-02)
+
+
+
 ## [0.3.1](https://github.com/luwes/videojs-video-element/compare/v0.3.0...v0.3.1) (2023-04-02)
 
 
