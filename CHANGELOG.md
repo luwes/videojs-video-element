@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/luwes/videojs-video-element/compare/v0.3.0...v0.3.1) (2023-04-02)
+
+
+### Bug Fixes
+
+* min dimensions, use video slot ([95dbac2](https://github.com/luwes/videojs-video-element/commit/95dbac210ad96e29633dc573a6002209961ef40a))
+
+
+
 # [0.3.0](https://github.com/luwes/videojs-video-element/compare/v0.1.2...v0.3.0) (2023-04-01)
 
 
