@@ -14,7 +14,7 @@ for Video.js with an API that matches the
 
 <!-- prettier-ignore -->
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/videojs-video-element@0.2/+esm"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/videojs-video-element@1.0/+esm"></script>
 <videojs-video controls src="https://stream.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/high.mp4"></videojs-video>
 ```
 
