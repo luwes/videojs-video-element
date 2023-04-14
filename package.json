@@ -18,10 +18,10 @@
     "dev": "wet serve"
   },
   "dependencies": {
-    "super-media-element": "^0.4.2"
+    "super-media-element": "~1.2.1"
   },
   "devDependencies": {
-    "wet-run": "^0.0.7"
+    "wet-run": "^0.0.8"
   },
   "eslintConfig": {
     "root": true,

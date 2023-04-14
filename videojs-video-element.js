@@ -30,18 +30,10 @@ templateShadowDOM.innerHTML = /*html*/`
 
 class VideojsVideoElement extends SuperVideoElement {
   static template = templateShadowDOM;
-
-  static observedAttributes = [
-    ...SuperVideoElement.observedAttributes,
-    'stylesheet',
-  ];
+  static observedAttributes = [...SuperVideoElement.observedAttributes, 'stylesheet'];
+  static skipAttributes = ['src', 'controls', 'poster'];
 
   #apiInit;
-
-  constructor() {
-    super();
-    this.loadComplete = new PublicPromise();
-  }
 
   get nativeEl() {
     return this.querySelector(':scope > [slot=video]')
@@ -49,11 +41,6 @@ class VideojsVideoElement extends SuperVideoElement {
   }
 
   async load() {
-    if (this.hasLoaded) this.loadComplete = new PublicPromise();
-    this.hasLoaded = true;
-
-    // Wait 1 tick to allow other attributes to be set.
-    await Promise.resolve();
 
     const options = {
       autoplay: this.autoplay,
@@ -86,17 +73,16 @@ class VideojsVideoElement extends SuperVideoElement {
 
       this.api = videojs(video, options);
       if (this.src) this.api.src(this.src);
+
     } else {
+
       this.api.src(this.src);
     }
 
     this.api.ready(() => {
       this.dispatchEvent(new Event('volumechange'));
-      this.dispatchEvent(new Event('loadcomplete'));
       this.loadComplete.resolve();
     });
-
-    await this.loadComplete;
   }
 
   connectedCallback() {
@@ -127,41 +113,38 @@ class VideojsVideoElement extends SuperVideoElement {
     }
   }
 
-  async attributeChangedCallback(attrName, oldValue, newValue) {
+  async attributeChangedCallback(attr, oldValue, newValue) {
     // This is required to come before the await for resolving loadComplete.
-    switch (attrName) {
-      case 'src': {
-        this.load();
-        return;
+
+    if (attr === 'stylesheet') {
+      this.shadowRoot.querySelector('#stylesheet')?.remove();
+
+      if (newValue) {
+        this.shadowRoot.prepend(
+          createElement('link', {
+            id: 'stylesheet',
+            href: newValue,
+            rel: 'stylesheet',
+            crossorigin: '',
+          })
+        );
       }
-      case 'stylesheet':
-        this.shadowRoot.querySelector('#stylesheet')?.remove();
-        if (newValue) {
-          this.shadowRoot.prepend(
-            createElement('link', {
-              id: 'stylesheet',
-              href: newValue,
-              rel: 'stylesheet',
-              crossorigin: '',
-            })
-          );
-        }
-        return;
+      return;
     }
 
-    super.attributeChangedCallback(attrName, oldValue, newValue);
-
-    // Don't await super.attributeChangedCallback above, it would resolve later.
-    await this.loadComplete;
-
-    switch (attrName) {
-      case 'controls':
-        this.api.controls(newValue != null);
-        break;
-      case 'poster':
-        this.api.poster(newValue);
-        break;
+    if (attr === 'controls') {
+      await this.loadComplete;
+      this.api.controls(newValue != null);
+      return;
     }
+
+    if (attr === 'poster') {
+      await this.loadComplete;
+      this.api.poster(newValue);
+      return;
+    }
+
+    super.attributeChangedCallback(attr, oldValue, newValue);
   }
 
   // Override all methods for video.js so it calls its API directly.
@@ -183,87 +166,23 @@ class VideojsVideoElement extends SuperVideoElement {
   // the setter again too unless it's a read only property! It's a JS thing.
 
   get version() {
-    return this.getAttribute('version') ?? '8.2.1';
-  }
-
-  get src() {
-    return this.getAttribute('src');
-  }
-
-  set src(val) {
-    if (this.src == val) return;
-    this.setAttribute('src', val);
-  }
-
-  get controls() {
-    return this.hasAttribute('controls');
-  }
-
-  set controls(val) {
-    if (this.controls == val) return;
-
-    if (val) {
-      this.setAttribute('controls', '');
-    } else {
-      // Remove boolean attribute if false, 0, '', null, undefined.
-      this.removeAttribute('controls');
-    }
-  }
-
-  get poster() {
-    return this.getAttribute('poster');
-  }
-
-  set poster(val) {
-    if (this.poster == val) return;
-    this.setAttribute('poster', `${val}`);
-  }
-
-  get stylesheet() {
-    return this.getAttribute('stylesheet');
-  }
-
-  set stylesheet(val) {
-    if (this.stylesheet == val) return;
-    this.setAttribute('stylesheet', `${val}`);
+    return this.getAttribute('version') ?? '8.3.0';
   }
 }
 
 const loadScriptCache = {};
-async function loadScript(src, globalName, readyFnName) {
+async function loadScript(src, globalName) {
+  if (!globalName) return import(src);
   if (loadScriptCache[src]) return loadScriptCache[src];
-  if (globalName && self[globalName]) {
-    await delay(0);
-    return self[globalName];
-  }
-  return (loadScriptCache[src] = new Promise(function (resolve, reject) {
+  if (self[globalName]) return self[globalName];
+  return (loadScriptCache[src] = new Promise((resolve, reject) => {
     const script = document.createElement('script');
+    script.defer = true;
     script.src = src;
-    const ready = () => resolve(self[globalName]);
-    if (readyFnName) (self[readyFnName] = ready);
-    script.onload = () => !readyFnName && ready();
+    script.onload = () => resolve(self[globalName]);
     script.onerror = reject;
     document.head.append(script);
   }));
-}
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-/**
- * A utility to create Promises with convenient public resolve and reject methods.
- * @return {Promise}
- */
-class PublicPromise extends Promise {
-  constructor(executor = () => {}) {
-    let res, rej;
-    super((resolve, reject) => {
-      executor(resolve, reject);
-      res = resolve;
-      rej = reject;
-    });
-    this.resolve = res;
-    this.reject = rej;
-  }
 }
 
 function createElement(tag, attrs = {}, ...children) {
