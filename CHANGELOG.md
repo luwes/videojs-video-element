@@ -1,3 +1,13 @@
+## [1.0.1](https://github.com/luwes/videojs-video-element/compare/v1.0.0...v1.0.1) (2023-04-15)
+
+
+### Bug Fixes
+
+* set `nativeTextTracks` true fixes [#56](https://github.com/luwes/videojs-video-element/issues/56) ([a599f46](https://github.com/luwes/videojs-video-element/commit/a599f46242483edba5b6e9b5cd93a31baebcc942))
+* upgrade super-media-element v1.2.1 ([d8e4802](https://github.com/luwes/videojs-video-element/commit/d8e480277ea13303d5f76560cef54c476b2cd80e))
+
+
+
 # [1.0.0](https://github.com/luwes/videojs-video-element/compare/v0.3.1...v1.0.0) (2023-04-02)
 
 
