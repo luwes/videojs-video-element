@@ -60,20 +60,29 @@
   loop
   muted
 >
-  <source
-    src="https://stream.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/high.mp4"
-  />
+  <source src="https://stream.mux.com/O6LdRc0112FEJXH00bGsN9Q31yu5EIVHTgjTKRkKtEq1k/high.mp4">
   <track
     default
     label="English"
     kind="captions"
     srclang="en"
     src="./en-cc.vtt"
-  />
+  >
 </videojs-video>
 
+<br>
+
+<button id="loadbtn">Load new clip</button>
+
 <script>
-  const video = document.querySelector('videojs-video');
+  video = document.querySelector('videojs-video');
+
+  loadbtn.onclick = () => {
+    [...video.children].forEach(c => c.remove());
+
+    video.src = 'https://stream.mux.com/ERDtGClvKFcaBm01psUirD1tGcV4NeTqEtRNf1Zy87800/low.mp4';
+    video.poster = "";
+  }
 
   video.addEventListener('emptied', (e) => {
     console.log(e.type);

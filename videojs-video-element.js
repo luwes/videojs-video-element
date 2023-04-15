@@ -75,12 +75,6 @@ class VideojsVideoElement extends SuperVideoElement {
         videojs = await loadScript(scriptUrl, 'videojs');
       }
 
-      for (let old of video.querySelectorAll('source,track'))
-        old.remove();
-
-      for (let el of this.querySelectorAll('source,track'))
-        video.append(el.cloneNode(true));
-
       this.api = videojs(video, options);
       if (this.src) this.api.src(this.src);
 
@@ -90,7 +84,6 @@ class VideojsVideoElement extends SuperVideoElement {
     }
 
     this.api.ready(() => {
-      this.dispatchEvent(new Event('volumechange'));
       this.loadComplete.resolve();
     });
   }
