@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/luwes/videojs-video-element/compare/v1.0.1...v1.0.2) (2023-04-15)
+
+
+### Bug Fixes
+
+* use super-media source,track sync ([bae414f](https://github.com/luwes/videojs-video-element/commit/bae414fc9c143f5942228874b90ad2c636b9762a))
+
+
+
 ## [1.0.1](https://github.com/luwes/videojs-video-element/compare/v1.0.0...v1.0.1) (2023-04-15)
 
 
