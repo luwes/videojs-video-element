@@ -24,10 +24,8 @@ test('volume', async function (t) {
   await video.loadComplete;
 
   video.volume = 1;
-  await delay(100); // postMessage is not instant
   t.equal(video.volume, 1, 'is all turned up. volume: ' + video.volume);
   video.volume = 0.5;
-  await delay(100); // postMessage is not instant
   t.equal(video.volume, 0.5, 'is half volume');
 });
 

@@ -13,6 +13,8 @@ templateShadowDOM.innerHTML = /*html*/`
   video {
     max-width: 100%;
     max-height: 100%;
+    min-width: 100%;
+    min-height: 100%;
   }
   div.video-js {
     position: absolute;
@@ -48,6 +50,10 @@ class VideojsVideoElement extends SuperVideoElement {
       playsinline: this.playsInline,
       controls: this.controls,
       muted: this.defaultMuted,
+      loop: this.loop,
+      html5: {
+        nativeTextTracks: true
+      }
     };
 
     if (!this.controls) {
@@ -69,7 +75,11 @@ class VideojsVideoElement extends SuperVideoElement {
         videojs = await loadScript(scriptUrl, 'videojs');
       }
 
-      video.append(...this.querySelectorAll('source'));
+      for (let old of video.querySelectorAll('source,track'))
+        old.remove();
+
+      for (let el of this.querySelectorAll('source,track'))
+        video.append(el.cloneNode(true));
 
       this.api = videojs(video, options);
       if (this.src) this.api.src(this.src);
@@ -161,9 +171,6 @@ class VideojsVideoElement extends SuperVideoElement {
   set(prop, val) {
     this.api?.[prop]?.(val);
   }
-
-  // If the getter from SuperVideoElement is overridden, it's required to define
-  // the setter again too unless it's a read only property! It's a JS thing.
 
   get version() {
     return this.getAttribute('version') ?? '8.3.0';
