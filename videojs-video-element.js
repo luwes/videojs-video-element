@@ -166,7 +166,7 @@ class VideojsVideoElement extends SuperVideoElement {
   }
 
   get version() {
-    return this.getAttribute('version') ?? '8.3.0';
+    return this.getAttribute('version') ?? '8.4.0';
   }
 }
 
