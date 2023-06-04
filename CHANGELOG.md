@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/luwes/videojs-video-element/compare/v1.0.2...v1.0.3) (2023-06-04)
+
+
+### Bug Fixes
+
+* upgrade default videojs version ([#57](https://github.com/luwes/videojs-video-element/issues/57)) ([01d0520](https://github.com/luwes/videojs-video-element/commit/01d052026cf504fdf7e4bcb4221be6199e7b9764))
+
+
+
 ## [1.0.2](https://github.com/luwes/videojs-video-element/compare/v1.0.1...v1.0.2) (2023-04-15)
 
 
