@@ -1,7 +1,7 @@
 // https://docs.videojs.com/
 import { SuperVideoElement } from 'super-media-element';
 
-const templateShadowDOM = document.createElement('template');
+const templateShadowDOM = globalThis.document?.createElement('template');
 templateShadowDOM.innerHTML = /*html*/`
 <style>
   :host {
@@ -194,7 +194,7 @@ function createElement(tag, attrs = {}, ...children) {
   return el;
 }
 
-if (!globalThis.customElements.get('videojs-video')) {
+if (globalThis.customElements && !globalThis.customElements.get('videojs-video')) {
   globalThis.customElements.define('videojs-video', VideojsVideoElement);
 }
 
