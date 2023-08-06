@@ -1,5 +1,6 @@
 // https://docs.videojs.com/
 import { SuperVideoElement } from 'super-media-element';
+import { MediaTracksMixin } from 'media-tracks';
 
 const templateShadowDOM = globalThis.document?.createElement('template');
 templateShadowDOM.innerHTML = /*html*/`
@@ -30,7 +31,7 @@ templateShadowDOM.innerHTML = /*html*/`
 <slot></slot>
 `;
 
-class VideojsVideoElement extends SuperVideoElement {
+class VideojsVideoElement extends MediaTracksMixin(SuperVideoElement) {
   static template = templateShadowDOM;
   static observedAttributes = [...SuperVideoElement.observedAttributes, 'stylesheet'];
   static skipAttributes = ['src', 'controls', 'poster'];
@@ -77,6 +78,67 @@ class VideojsVideoElement extends SuperVideoElement {
 
       this.api = videojs(video, options);
       if (this.src) this.api.src(this.src);
+
+      // Set up tracks & renditions
+
+      this.api.audioTracks().on('addtrack', ({ track }) => {
+        const audioTrack = this.addAudioTrack(track.kind, track.label, track.language);
+        audioTrack.id = track.id;
+        audioTrack.enabled = track.enabled;
+      });
+
+      this.audioTracks.addEventListener('change', () => {
+        const audioTracks = this.api.audioTracks();
+
+        for (let i = 0; i < audioTracks.length; i++) {
+          const audioTrack = audioTracks[i];
+          audioTrack.enabled = this.audioTracks.getTrackById(audioTrack.id).enabled;
+        }
+      });
+
+      const qualityLevels = this.api.qualityLevels();
+
+      qualityLevels.on('addqualitylevel', (event) => {
+        let videoTrack = this.videoTracks[0];
+
+        if (!videoTrack) {
+          videoTrack = this.addVideoTrack('main');
+          videoTrack.selected = true;
+        }
+
+        const qualityLevel = event.qualityLevel;
+        const videoRendition = videoTrack.addRendition(
+          qualityLevel.id,
+          qualityLevel.width,
+          qualityLevel.height,
+          undefined,
+          qualityLevel.bitrate
+        );
+        videoRendition.id = qualityLevel.id;
+      });
+
+      const switchRendition = ({ target: renditions }) => {
+        const isAuto = renditions.selectedIndex === -1;
+
+        for (let rendition of renditions) {
+          const qualityLevel = qualityLevels.getQualityLevelById(rendition.id);
+          qualityLevel.enabled = isAuto || rendition.selected;
+        }
+      };
+
+      this.videoRenditions.addEventListener('change', switchRendition);
+
+      const removeAllMediaTracks = () => {
+        for (const videoTrack of this.videoTracks) {
+          this.removeVideoTrack(videoTrack);
+        }
+        for (const audioTrack of this.audioTracks) {
+          this.removeAudioTrack(audioTrack);
+        }
+      };
+
+      this.api.on('emptied', removeAllMediaTracks);
+      this.api.on('loadstart', removeAllMediaTracks);
 
     } else {
 
