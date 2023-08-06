@@ -1,3 +1,19 @@
+# [1.1.0](https://github.com/luwes/videojs-video-element/compare/v1.0.3...v1.1.0) (2023-08-06)
+
+
+### Bug Fixes
+
+* potential server type errors ([13cae98](https://github.com/luwes/videojs-video-element/commit/13cae987abe991ba089eb9e89e0e3389a4ba68d5))
+* upgrade dependencies ([f654dd4](https://github.com/luwes/videojs-video-element/commit/f654dd454c785bc07847f03c2770c230b502bc50))
+* upgrade minor versions automatically ([df91d0f](https://github.com/luwes/videojs-video-element/commit/df91d0f1ff7fd2ff48b16e8cfef3706691d78399))
+
+
+### Features
+
+* add audio tracks & renditions support ([f74338e](https://github.com/luwes/videojs-video-element/commit/f74338eb83adc597a96ba66ec5420280cc30a54d))
+
+
+
 ## [1.0.3](https://github.com/luwes/videojs-video-element/compare/v1.0.2...v1.0.3) (2023-06-04)
 
 
