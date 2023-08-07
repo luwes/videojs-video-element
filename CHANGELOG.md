@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/luwes/videojs-video-element/compare/v1.1.0...v1.1.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* duplicate tracks ([9452172](https://github.com/luwes/videojs-video-element/commit/9452172313c4fcd5cc46bb344486f9f614f30241))
+
+
+
 # [1.1.0](https://github.com/luwes/videojs-video-element/compare/v1.0.3...v1.1.0) (2023-08-06)
 
 
