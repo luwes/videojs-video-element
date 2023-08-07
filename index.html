@@ -197,7 +197,7 @@
   });
 
   video2.audioTracks.addEventListener('removetrack', ({ track }) => {
-    audioselect.querySelector(`[value="${track.id}"]`).remove();
+    audioselect.querySelector(`[value="${track.id}"]`)?.remove();
   });
 
   video2.audioTracks.addEventListener('addtrack', ({ track }) => {

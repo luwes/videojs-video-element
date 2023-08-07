@@ -82,9 +82,16 @@ class VideojsVideoElement extends MediaTracksMixin(SuperVideoElement) {
       // Set up tracks & renditions
 
       this.api.audioTracks().on('addtrack', ({ track }) => {
+        if (this.audioTracks.getTrackById(track.id)) return;
+
         const audioTrack = this.addAudioTrack(track.kind, track.label, track.language);
-        audioTrack.id = track.id;
+        audioTrack.id = `${track.id}`;
         audioTrack.enabled = track.enabled;
+      });
+
+      this.api.audioTracks().on('removetrack', ({ track }) => {
+        const audioTrack = this.audioTracks.getTrackById(track.id);
+        if (audioTrack) this.removeAudioTrack(audioTrack);
       });
 
       this.audioTracks.addEventListener('change', () => {
@@ -114,7 +121,7 @@ class VideojsVideoElement extends MediaTracksMixin(SuperVideoElement) {
           undefined,
           qualityLevel.bitrate
         );
-        videoRendition.id = qualityLevel.id;
+        videoRendition.id = `${qualityLevel.id}`;
       });
 
       const switchRendition = ({ target: renditions }) => {
